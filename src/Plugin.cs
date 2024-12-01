@@ -17,19 +17,21 @@ public class Plugin : BaseUnityPlugin
     internal static new ManualLogSource Logger;
 
 
-    static Color FREEZER_COLOR = new(0.298f, 0.604f, 1, 1);
+    static readonly Color FREEZER_COLOR = new(0.298f, 0.604f, 1, 1);
 
-    static Color FRIDGE_COLOR = new(0.4f, 0.851f, 0.69f, 1);
+    static readonly Color FRIDGE_COLOR = new(0.4f, 0.851f, 0.69f, 1);
 
-    static Color CRATE_COLOR = new(0.545f, 0.271f, 0.075f, 1);
+    static readonly Color CRATE_COLOR = new(0.545f, 0.271f, 0.075f, 1);
 
-    static Color EDIBLE_COLOR = new(0.639f, 0.843f, 0.478f, 1);
+    static readonly Color SHELF_COLOR = new(0.827f, 0.827f, 0.827f, 1);
 
-    static Color DRINK_COLOR = new(0.275f, 0.51f, 0.706f, 1);
+    static readonly Color EDIBLE_COLOR = new(0.639f, 0.843f, 0.478f, 1);
 
-    static Color CLEANING_COLOR = new(0.961f, 0.961f, 0.961f, 1);
+    static readonly Color DRINK_COLOR = new(0.275f, 0.51f, 0.706f, 1);
 
-    static Color BOOK_COLOR = new(0.824f, 0.706f, 0.549f, 1);
+    static readonly Color CLEANING_COLOR = new(0.961f, 0.961f, 0.961f, 1);
+
+    static readonly Color BOOK_COLOR = new(0.824f, 0.706f, 0.549f, 1);
 
 
     private void Awake()
@@ -87,7 +89,7 @@ public class Plugin : BaseUnityPlugin
         private static void SetColor(Label label, int productId)
         {
             var product = Singleton<IDManager>.Instance.ProductSO(productId);
-            var color = Color.white;
+            Color color;
 
             if (product.ProductDisplayType == DisplayType.FRIDGE)
             {
@@ -116,6 +118,10 @@ public class Plugin : BaseUnityPlugin
             else if (product.Category == ProductSO.ProductCategory.BOOK)
             {
                 color = BOOK_COLOR;
+            }
+            else
+            {
+                color = SHELF_COLOR;
             }
 
 

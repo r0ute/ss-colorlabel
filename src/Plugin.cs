@@ -5,9 +5,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using MyBox;
-using TMPro;
 using UnityEngine;
-using VLB;
 
 namespace SS.src;
 
@@ -33,11 +31,22 @@ public class Plugin : BaseUnityPlugin
 
     static readonly Color BOOK_COLOR = new(0.824f, 0.706f, 0.549f, 1);
 
+    internal static ConfigEntry<bool> ColorDisplayLabel;
+
+    internal static ConfigEntry<bool> ColorRackLabel;
+
+    internal static ConfigEntry<bool> InGameProductNameColor;
 
     private void Awake()
     {
         // Plugin startup logic
         Logger = base.Logger;
+
+        ColorDisplayLabel = Config.Bind("General", "ColorDisplayLabel", true, "Color labeling for display slots");
+
+        ColorRackLabel = Config.Bind("General", "ColorRackLabel", true, "Color labeling for rack slots");
+
+        InGameProductNameColor = Config.Bind("General", "InGameProductNameColor", false, "Apply in-game product name colors (currently, the same color is used for all products)");
 
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll(typeof(Patches));
@@ -66,7 +75,7 @@ public class Plugin : BaseUnityPlugin
                 .Where((product) => product.ProductDisplayType == displayType)
                 .OrderBy(product => product.Category)
                 .ThenBy(product => product.ProductName)
-                .ForEach(product => Logger.LogDebug($"Product: name={product},category={product.Category}"));
+                .ForEach(product => Logger.LogDebug($"Product: name={product},category={product.Category},color={product.ProductNameColor}"));
 
         }
 
@@ -75,6 +84,12 @@ public class Plugin : BaseUnityPlugin
         [HarmonyPostfix]
         static void OnLabelDisplaySetup(DisplaySlot displaySlot, ref Label __instance)
         {
+            if (!ColorDisplayLabel.Value)
+            {
+                return;
+            }
+
+
             SetColor(__instance, displaySlot.ProductID);
         }
 
@@ -83,6 +98,11 @@ public class Plugin : BaseUnityPlugin
         [HarmonyPostfix]
         static void OnLabelRackSetup(RackSlot rackSlot, ref Label __instance)
         {
+            if (!ColorRackLabel.Value)
+            {
+                return;
+            }
+
             SetColor(__instance, rackSlot.Data.ProductID);
         }
 
@@ -91,7 +111,11 @@ public class Plugin : BaseUnityPlugin
             var product = Singleton<IDManager>.Instance.ProductSO(productId);
             Color color;
 
-            if (product.ProductDisplayType == DisplayType.FRIDGE)
+            if (InGameProductNameColor.Value)
+            {
+                color = product.ProductNameColor;
+            }
+            else if (product.ProductDisplayType == DisplayType.FRIDGE)
             {
                 color = FRIDGE_COLOR;
             }

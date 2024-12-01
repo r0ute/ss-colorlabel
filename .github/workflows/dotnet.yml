@@ -38,4 +38,4 @@ jobs:
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: bin/Release/netstandard2.1/publish/com.bepinex.plugin.ss.autofillrack.dll
+        files: bin/Release/netstandard2.1/publish/com.bepinex.plugin.ss.colorlabel.dll

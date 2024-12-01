@@ -1,5 +1,13 @@
 # Color Label
 
+The plugin enhances the **Supermarket Simulator** by adding customizable color labels to display and rack slots. This plugin helps to visually organize the game environment by applying distinct colors to different display types and product categories.
+
+
+## Features
+- **Color labeling for display slots**: Each display type (e.g., freezer, fridge) has a fixed color label.
+- **Color labeling for rack slots**: Different rack categories also have their own label colors.
+- **Product category colors**: The plugin applies specific colors to product categories (e.g., Edible, Drink, etc.), helping you quickly identify products at a glance.
+
 ## DisplayType
 
 | Display Type | Color (HTML Code)                                            |

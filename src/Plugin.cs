@@ -37,16 +37,41 @@ public class Plugin : BaseUnityPlugin
 
     internal static ConfigEntry<bool> InGameProductNameColor;
 
+    internal static ConfigEntry<Color> DisplayTypeFreezerColor;
+
+    internal static ConfigEntry<Color> DisplayTypeFridgeColor;
+
+    internal static ConfigEntry<Color> DisplayTypeCrateColor;
+
+    internal static ConfigEntry<Color> DisplayTypeShelfColor;
+
+    internal static ConfigEntry<Color> ProductCategoryEdibleColor;
+
+    internal static ConfigEntry<Color> ProductCategoryDrinkColor;
+
+    internal static ConfigEntry<Color> ProductCategoryCleaningColor;
+
+    internal static ConfigEntry<Color> ProductCategoryBookColor;
+
     private void Awake()
     {
         // Plugin startup logic
         Logger = base.Logger;
 
-        ColorDisplayLabel = Config.Bind("General", "ColorDisplayLabel", true, "Color labeling for display slots");
+        ColorDisplayLabel = Config.Bind("*General*", "ColorDisplayLabel", true, "Color labeling for display slots");
+        ColorRackLabel = Config.Bind("*General*", "ColorRackLabel", true, "Color labeling for rack slots");
+        InGameProductNameColor = Config.Bind("*General*", "InGameProductNameColor", false,
+            "Apply in-game product name colors (currently, the same color is used for all products)");
 
-        ColorRackLabel = Config.Bind("General", "ColorRackLabel", true, "Color labeling for rack slots");
+        DisplayTypeFreezerColor = Config.Bind("DisplayType", "FreezerColor", FREEZER_COLOR, "FREEZER");
+        DisplayTypeFridgeColor = Config.Bind("DisplayType", "FridgeColor", FRIDGE_COLOR, "FRIDGE_COLOR");
+        DisplayTypeCrateColor = Config.Bind("DisplayType", "CrateColor", CRATE_COLOR, "CRATE_COLOR");
+        DisplayTypeShelfColor = Config.Bind("DisplayType", "ShelfColor", SHELF_COLOR, "SHELF_COLOR");
 
-        InGameProductNameColor = Config.Bind("General", "InGameProductNameColor", false, "Apply in-game product name colors (currently, the same color is used for all products)");
+        ProductCategoryEdibleColor = Config.Bind("ProductCategory", "EdibleColor", EDIBLE_COLOR, "EDIBLE_COLOR");
+        ProductCategoryDrinkColor = Config.Bind("ProductCategory", "DrinkColor", DRINK_COLOR, "DRINK_COLOR");
+        ProductCategoryCleaningColor = Config.Bind("ProductCategory", "CleaningColor", CLEANING_COLOR, "CLEANING_COLOR");
+        ProductCategoryBookColor = Config.Bind("ProductCategory", "BookColor", BOOK_COLOR, "BOOK_COLOR");
 
         Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll(typeof(Patches));
@@ -117,35 +142,35 @@ public class Plugin : BaseUnityPlugin
             }
             else if (product.ProductDisplayType == DisplayType.FRIDGE)
             {
-                color = FRIDGE_COLOR;
+                color = DisplayTypeFridgeColor.Value;
             }
             else if (product.ProductDisplayType == DisplayType.FREEZER)
             {
-                color = FREEZER_COLOR;
+                color = DisplayTypeFreezerColor.Value;
             }
             else if (product.ProductDisplayType == DisplayType.CRATE)
             {
-                color = CRATE_COLOR;
+                color = DisplayTypeCrateColor.Value;
             }
             else if (product.Category == ProductSO.ProductCategory.EDIBLE)
             {
-                color = EDIBLE_COLOR;
+                color = ProductCategoryEdibleColor.Value;
             }
             else if (product.Category == ProductSO.ProductCategory.DRINK)
             {
-                color = DRINK_COLOR;
+                color = ProductCategoryDrinkColor.Value;
             }
             else if (product.Category == ProductSO.ProductCategory.CLEANING)
             {
-                color = CLEANING_COLOR;
+                color = ProductCategoryCleaningColor.Value;
             }
             else if (product.Category == ProductSO.ProductCategory.BOOK)
             {
-                color = BOOK_COLOR;
+                color = ProductCategoryBookColor.Value;
             }
             else
             {
-                color = SHELF_COLOR;
+                color = DisplayTypeShelfColor.Value;
             }
 
 
